@@ -1,13 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateProjectDto } from './dto/create-project.dto';
-import { UpdateProjectDto } from './dto/update-project.dto';
 import { PrismaService } from 'src/db/prisma.service';
+
+type CreateProjectInput = {
+  title: string;
+  status: string;
+};
+
+type UpdateProjectInput = {
+  title?: string;
+  status?: string;
+};
 
 @Injectable()
 export class ProjectService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(data: CreateProjectDto) {
+  create(data: CreateProjectInput) {
     return this.prisma.project.create({
       data,
     });
@@ -15,7 +23,9 @@ export class ProjectService {
 
   findAll() {
     return this.prisma.project.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
   }
 
@@ -25,14 +35,15 @@ export class ProjectService {
     });
 
     if (!project) {
-      throw new NotFoundException(`Project with ${id} not found`);
+      throw new NotFoundException(`Project with id "${id}" not found`);
     }
 
     return project;
   }
 
-  async update(id: string, data: UpdateProjectDto) {
+  async update(id: string, data: UpdateProjectInput) {
     await this.findOne(id);
+
     return this.prisma.project.update({
       where: { id },
       data,
@@ -41,6 +52,7 @@ export class ProjectService {
 
   async remove(id: string) {
     await this.findOne(id);
+
     return this.prisma.project.delete({
       where: { id },
     });

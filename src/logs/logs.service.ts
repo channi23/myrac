@@ -1,14 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/db/prisma.service';
-import { CreateLogDto } from './dto/create-log.dto';
-import { UpdateLogDto } from './dto/update-log.dto';
 
 
 @Injectable()
 export class LogsService {
     constructor(private readonly prisma:PrismaService){}
 
-    create(data:CreateLogDto){
+    create(data: { content: string }){
         return this.prisma.logs.create({
             data,
         });
@@ -30,19 +28,25 @@ export class LogsService {
         return log;
     }
 
-   async  update(id:string,data:UpdateLogDto){
-        await this.findOne(id);
-        return this.prisma.logs.update({
-            where:{id},
-            data,
-        });
+   async update(id: string, data: { content?: string }) {
+        try {
+            return await this.prisma.logs.update({
+                where: { id },
+                data,
+            });
+        } catch (error) {
+            throw new NotFoundException(`Log with id "${id}" not found`);
+        }
     }
 
     async remove(id:string){
-        await this.findOne(id);
-        return this.prisma.logs.delete({
-            where:{id},
-        });
+        try {
+            return await this.prisma.logs.delete({
+                where: { id },
+            });
+        } catch (error) {
+            throw new NotFoundException(`Log with id "${id}" not found`);
+        }
     }
 
 }
