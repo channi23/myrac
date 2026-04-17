@@ -17,7 +17,7 @@ model Project{
   status String
   createdAt DateTime @default(now())
 }
-model Logs{
+model Log{
   id String @id @default(uuid())
   content String
   createdAt DateTime @default(now())

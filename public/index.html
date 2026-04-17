@@ -1,0 +1,1351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sri Hari Haran — Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap">
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --ink:#f4f4f2;
+    --ink-dim:#8a8a86;
+    --ink-mute:#4a4a46;
+    --line:#1f1f1d;
+    --line-2:#2a2a28;
+    --accent:#e8e6dc;
+    --glow:#ffffff;
+    --hot:#ff3b1f;
+    --live:#10d37a;
+    --mono:'JetBrains Mono', ui-monospace, Menlo, monospace;
+    --sans:'Space Grotesk', system-ui, sans-serif;
+  }
+  html[data-theme="paper"]{
+    --bg:#ece9df; --ink:#0a0a0a; --ink-dim:#4a4a46; --ink-mute:#8a8a86;
+    --line:#1a1a18; --line-2:#26241e; --accent:#0a0a0a; --glow:#0a0a0a;
+    --hot:#c8321c; --live:#0a7f44;
+  }
+  html[data-theme="amber"]{
+    --bg:#0a0806; --ink:#f2c57d; --ink-dim:#8a6a3b; --ink-mute:#4a3a1f;
+    --line:#2a1f10; --line-2:#3a2a15; --accent:#f2c57d; --glow:#ffd89b;
+    --hot:#ff6a1f; --live:#f2c57d;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--mono);
+    font-size:13px;
+    line-height:1.45;
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(ellipse 80% 70% at 50% 50%, black 40%, transparent 100%);
+    pointer-events:none;
+    z-index:0;
+    opacity:.55;
+  }
+
+  .chrome{
+    position:fixed; top:0; left:0; right:0;
+    display:grid; grid-template-columns: 1fr auto 1fr;
+    align-items:center;
+    padding:14px 20px;
+    border-bottom:1px solid var(--line-2);
+    background:color-mix(in srgb, var(--bg) 85%, transparent);
+    backdrop-filter:blur(10px);
+    z-index:50;
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+  .chrome .l, .chrome .r{display:flex; gap:18px; align-items:center;}
+  .chrome .r{justify-content:flex-end;}
+  .chrome .pill{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:5px 10px;
+    border:1px solid var(--line-2);
+    color:var(--ink-dim);
+  }
+  .chrome .pill .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--live);
+    box-shadow:0 0 0 3px color-mix(in srgb, var(--live) 25%, transparent);
+    animation:pulse 1.6s infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:1; transform:scale(1);}
+    50%{ opacity:.55; transform:scale(.85);}
+  }
+  .chrome .brand{font-weight:700; letter-spacing:.2em; color:var(--ink);}
+  .chrome .brand b{color:var(--hot);}
+  .chrome .center{font-weight:700; letter-spacing:.32em; color:var(--ink);}
+  .chrome button{
+    all:unset; cursor:pointer;
+    padding:5px 10px;
+    border:1px solid var(--line-2);
+    color:var(--ink-dim);
+    font-family:inherit; font-size:11px; letter-spacing:.12em;
+  }
+  .chrome button:hover{ color:var(--ink); border-color:var(--ink); }
+  .chrome button[aria-pressed="true"]{ color:var(--ink); border-color:var(--ink); background:color-mix(in srgb, var(--ink) 6%, transparent);}
+
+  .ticker{
+    position:fixed; bottom:0; left:0; right:0;
+    height:32px;
+    border-top:1px solid var(--line-2);
+    background:color-mix(in srgb, var(--bg) 90%, transparent);
+    backdrop-filter:blur(10px);
+    display:flex; align-items:center; gap:32px;
+    padding:0 20px;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    z-index:50;
+    overflow:hidden;
+    white-space:nowrap;
+  }
+  .ticker .tick-track{
+    display:flex; gap:40px;
+    animation: roll 60s linear infinite;
+    padding-left:20px;
+  }
+  .ticker .tick-track span b{color:var(--ink);}
+  .ticker .tick-track span .hot{color:var(--hot);}
+  @keyframes roll{
+    0%{ transform:translateX(0);}
+    100%{ transform:translateX(-50%);}
+  }
+
+  .stage{
+    position:relative;
+    height:100vh; width:100vw;
+    display:flex; align-items:center; justify-content:center;
+    padding:64px 20px 40px;
+    z-index:1;
+  }
+
+  .frame-corners{
+    position:absolute; inset:54px 20px 44px;
+    pointer-events:none;
+    z-index:2;
+  }
+  .frame-corners .c{
+    position:absolute; width:18px; height:18px;
+    border:1px solid var(--ink-mute);
+  }
+  .frame-corners .c.tl{ top:0; left:0; border-right:0; border-bottom:0;}
+  .frame-corners .c.tr{ top:0; right:0; border-left:0; border-bottom:0;}
+  .frame-corners .c.bl{ bottom:0; left:0; border-right:0; border-top:0;}
+  .frame-corners .c.br{ bottom:0; right:0; border-left:0; border-top:0;}
+
+  .scene{
+    position:relative;
+    width:min(95vw, 1100px);
+    height:min(82vh, 760px);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .scene svg{ overflow:visible; }
+
+  .portrait-wrap{
+    position:absolute; inset:0;
+    display:grid; place-items:center;
+    transition:transform .7s cubic-bezier(.2,.8,.2,1), opacity .4s;
+  }
+  .portrait-wrap.zoomed{ transform:scale(1.9); }
+  .portrait-wrap.dim{ opacity:.18; filter:blur(1px);}
+
+  .pedestal{
+    font-family:var(--mono);
+    font-size:10px; letter-spacing:.28em;
+    color:var(--ink-mute);
+    text-transform:uppercase;
+    text-align:center;
+    margin-top:10px;
+  }
+
+  .hint{
+    position:absolute;
+    left:50%; top:calc(50% + 200px);
+    transform:translateX(-50%);
+    font-size:10px; letter-spacing:.3em;
+    color:var(--ink-mute);
+    text-transform:uppercase;
+    pointer-events:none;
+    transition:opacity .3s;
+  }
+  .portrait-wrap.zoomed ~ .hint{ opacity:0; }
+
+  .panel{
+    position:fixed;
+    top:54px; bottom:34px; right:20px;
+    width:min(520px, 42vw);
+    background:var(--bg);
+    border:1px solid var(--line-2);
+    transform:translateX(calc(100% + 40px));
+    transition:transform .5s cubic-bezier(.2,.8,.2,1);
+    z-index:40;
+    display:flex; flex-direction:column;
+    overflow:hidden;
+  }
+  .panel.open{ transform:translateX(0); }
+  .panel .ph{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 18px;
+    border-bottom:1px solid var(--line-2);
+    font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+  }
+  .panel .ph .idx{color:var(--ink-mute);}
+  .panel .ph .ttl{color:var(--ink); font-weight:700;}
+  .panel .ph .x{
+    all:unset; cursor:pointer;
+    width:22px; height:22px; border:1px solid var(--line-2);
+    display:grid; place-items:center;
+    color:var(--ink-dim);
+  }
+  .panel .ph .x:hover{ color:var(--hot); border-color:var(--hot); }
+  .panel .pb{ flex:1; overflow-y:auto; padding:20px; }
+  .panel .pb::-webkit-scrollbar{ width:6px; }
+  .panel .pb::-webkit-scrollbar-thumb{ background:var(--line-2);}
+
+  .panel section + section{ margin-top:22px; }
+  .panel h4{
+    font-family:var(--mono); font-size:10px; letter-spacing:.28em;
+    color:var(--ink-mute); text-transform:uppercase; font-weight:600;
+    margin-bottom:10px;
+    padding-bottom:6px; border-bottom:1px dashed var(--line-2);
+  }
+  .panel p, .panel li{ color:var(--ink); font-size:12.5px; }
+  .panel p + p{ margin-top:8px; }
+  .kv{ display:grid; grid-template-columns: 120px 1fr; gap:4px 14px; font-size:12px;}
+  .kv dt{ color:var(--ink-mute); text-transform:uppercase; letter-spacing:.14em; font-size:10.5px; padding-top:3px;}
+  .kv dd{ color:var(--ink);}
+
+  .row{ display:flex; align-items:center; justify-content:space-between; gap:14px; padding:10px 0; border-bottom:1px dashed var(--line-2);}
+  .row:last-child{border-bottom:0;}
+  .row .t{ color:var(--ink); }
+  .row .s{ color:var(--ink-dim); font-size:11px;}
+  .tag{
+    display:inline-block;
+    padding:2px 7px; margin:2px 4px 2px 0;
+    border:1px solid var(--line-2);
+    color:var(--ink-dim);
+    font-size:10.5px; letter-spacing:.1em;
+    text-transform:uppercase;
+  }
+  .tag.on{ background:var(--ink); color:var(--bg); border-color:var(--ink);}
+  .tag.hot{ color:var(--hot); border-color:var(--hot);}
+
+  .now{
+    border:1px solid var(--line-2);
+    padding:14px;
+    display:grid; grid-template-columns: 54px 1fr;
+    gap:14px;
+    align-items:center;
+    background:
+      repeating-linear-gradient(45deg, transparent 0 10px, color-mix(in srgb, var(--ink) 2%, transparent) 10px 11px);
+  }
+  .now .art{
+    width:54px; height:54px;
+    border:1px solid var(--ink);
+    display:grid; place-items:center;
+    position:relative;
+    background:var(--bg);
+  }
+  .now .art::before{
+    content:""; position:absolute; inset:8px;
+    border:1px solid var(--ink);
+    border-radius:50%;
+  }
+  .now .art::after{
+    content:""; position:absolute;
+    width:10px; height:10px; border-radius:50%;
+    background:var(--live);
+    box-shadow:0 0 10px var(--live);
+    animation:pulse 1.4s infinite;
+  }
+  .now .meta{min-width:0;}
+  .now .meta .lbl{ font-size:9.5px; letter-spacing:.24em; color:var(--live); text-transform:uppercase;}
+  .now .meta .t1{ font-size:14px; font-weight:700; color:var(--ink); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .now .meta .t2{ font-size:11px; color:var(--ink-dim); margin-top:1px;}
+  .now .bar{
+    height:3px; background:var(--line-2); margin-top:8px; position:relative; overflow:hidden;
+    grid-column:1 / -1;
+  }
+  .now .bar i{ position:absolute; inset:0 auto 0 0; background:var(--ink); animation: barPulse 2.4s ease-in-out infinite;}
+  @keyframes barPulse{ 0%{width:55%} 50%{width:75%} 100%{width:55%} }
+
+  .term{
+    background:color-mix(in srgb, var(--ink) 4%, transparent);
+    border:1px solid var(--line-2);
+    padding:12px;
+    font-size:11.5px;
+  }
+  .term .ln{ display:flex; gap:8px;}
+  .term .ln .c{ color:var(--ink-mute); user-select:none;}
+  .term .ln .p{ color:var(--hot);}
+  .term .ln b{ color:var(--ink);}
+  .term .ln span{ color:var(--ink-dim);}
+  .term .cursor::after{ content:"▌"; color:var(--ink); animation:blink 1s infinite;}
+  @keyframes blink{ 50%{ opacity:0;}}
+
+  .tree{ position:relative; padding:10px 2px; }
+  .tree .node{
+    position:relative;
+    padding:10px 12px 10px 28px;
+    border-left:1px solid var(--line-2);
+    margin-left:8px;
+  }
+  .tree .node::before{
+    content:""; position:absolute; left:-5px; top:16px;
+    width:9px; height:9px; border:1px solid var(--ink-mute); background:var(--bg);
+  }
+  .tree .node.done::before{ background:var(--ink); border-color:var(--ink);}
+  .tree .node.live::before{ background:var(--hot); border-color:var(--hot); box-shadow:0 0 0 3px color-mix(in srgb, var(--hot) 25%, transparent);}
+  .tree .node.next::before{ border-style:dashed;}
+  .tree .node .t{ font-size:12.5px; color:var(--ink); }
+  .tree .node .d{ font-size:10.5px; color:var(--ink-mute); letter-spacing:.14em; text-transform:uppercase; margin-top:1px;}
+  .tree .branch{ margin-left:22px;}
+  .tree .branch .node{ padding-left:22px; }
+  .tree .node.done .t{ color:var(--ink-dim); text-decoration:line-through; text-decoration-color:var(--ink-mute);}
+
+  .tweaks{
+    position:fixed; right:20px; bottom:44px;
+    width:280px;
+    background:var(--bg);
+    border:1px solid var(--line-2);
+    z-index:60;
+    transform: translateY(20px);
+    opacity:0; pointer-events:none;
+    transition: all .3s;
+  }
+  .tweaks.on{ transform:translateY(0); opacity:1; pointer-events:auto;}
+  .tweaks .th{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 12px; border-bottom:1px solid var(--line-2);
+    font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:var(--ink);
+  }
+  .tweaks .tb{ padding:12px; display:flex; flex-direction:column; gap:14px; }
+  .tweaks .group label{ display:block; font-size:9.5px; letter-spacing:.22em; color:var(--ink-mute); text-transform:uppercase; margin-bottom:6px;}
+  .tweaks .opts{ display:flex; gap:6px; flex-wrap:wrap;}
+  .tweaks .opts button{
+    all:unset; cursor:pointer;
+    padding:6px 9px;
+    border:1px solid var(--line-2);
+    font-family:var(--mono); font-size:10.5px; color:var(--ink-dim);
+    text-transform:uppercase; letter-spacing:.14em;
+  }
+  .tweaks .opts button[aria-pressed="true"]{
+    color:var(--bg); background:var(--ink); border-color:var(--ink);
+  }
+
+  .nodes-overlay{
+    position:absolute; inset:0; pointer-events:none;
+    z-index:5;
+  }
+  .node-label{
+    position:absolute;
+    transform:translate(-50%, -50%);
+    pointer-events:auto;
+    display:flex; flex-direction:column; align-items:center;
+    gap:4px;
+    cursor:pointer;
+    user-select:none;
+    transition: transform .3s, opacity .3s;
+  }
+  .node-label .dot{
+    width:14px; height:14px;
+    border:1px solid var(--ink);
+    background:var(--bg);
+    position:relative;
+    transition: all .25s;
+  }
+  .node-label .dot::after{
+    content:""; position:absolute; inset:3px;
+    background:transparent;
+    transition:background .25s;
+  }
+  .node-label:hover .dot{ transform:scale(1.15); }
+  .node-label:hover .dot::after{ background:var(--hot); }
+  .node-label.active .dot{ background:var(--hot); border-color:var(--hot);}
+  .node-label .lab{
+    font-size:9.5px;
+    letter-spacing:.22em;
+    color:var(--ink-dim);
+    text-transform:uppercase;
+    text-align:center;
+    white-space:nowrap;
+    background:var(--bg);
+    padding:2px 6px;
+    border:1px solid var(--line-2);
+  }
+  .node-label:hover .lab{ color:var(--ink); border-color:var(--ink); }
+  .node-label.active .lab{ color:var(--ink); border-color:var(--ink); background:color-mix(in srgb, var(--hot) 18%, var(--bg));}
+  .node-label .meta{ font-size:9px; color:var(--ink-mute); letter-spacing:.14em; text-transform:uppercase;}
+
+  .node-label.reactor-chip{ gap:6px; }
+  .node-label.reactor-chip .chip-num{
+    width:28px; height:28px;
+    display:grid; place-items:center;
+    font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.05em;
+    color:var(--ink);
+    border:1px solid var(--ink);
+    background:var(--bg);
+    position:relative;
+    transition: all .25s;
+  }
+  .node-label.reactor-chip .chip-num::before{
+    content:""; position:absolute; inset:-4px;
+    border:1px solid var(--line-2);
+  }
+  .node-label.reactor-chip:hover .chip-num,
+  .node-label.reactor-chip.active .chip-num{
+    background:var(--hot); color:var(--bg); border-color:var(--hot);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--hot) 55%, transparent);
+  }
+  .node-label.reactor-chip .lab{
+    font-size:9.5px; letter-spacing:.22em;
+    color:var(--ink-dim); text-transform:uppercase;
+    background:var(--bg); padding:2px 6px; border:1px solid var(--line-2);
+  }
+  .node-label.reactor-chip:hover .lab,
+  .node-label.reactor-chip.active .lab{ color:var(--ink); border-color:var(--ink);}
+
+  .about{
+    position:fixed; inset:54px 20px 34px;
+    display:grid; place-items:center;
+    pointer-events:none;
+    opacity:0;
+    transition:opacity .5s .2s;
+    z-index:20;
+  }
+  .about.on{ opacity:1; pointer-events:auto; }
+  .about .card{
+    width:min(680px, 90vw);
+    border:1px solid var(--ink);
+    background:var(--bg);
+    padding:32px 34px;
+    position:relative;
+  }
+  .about .card::before{
+    content:""; position:absolute; top:-1px; left:-1px; width:34px; height:34px;
+    border-top:2px solid var(--hot); border-left:2px solid var(--hot);
+  }
+  .about .card::after{
+    content:""; position:absolute; bottom:-1px; right:-1px; width:34px; height:34px;
+    border-bottom:2px solid var(--hot); border-right:2px solid var(--hot);
+  }
+  .about .tag-row{ display:flex; justify-content:space-between; font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-mute); margin-bottom:18px;}
+  .about h1{ font-family:var(--sans); font-weight:500; font-size:44px; line-height:1.05; letter-spacing:-.02em; margin-bottom:6px;}
+  .about h1 em{ font-style:normal; color:var(--hot); }
+  .about .sub{ font-family:var(--mono); font-size:12px; color:var(--ink-dim); letter-spacing:.18em; text-transform:uppercase; margin-bottom:22px;}
+  .about .bio{ font-family:var(--mono); font-size:13px; line-height:1.65; color:var(--ink); max-width:58ch;}
+  .about .bio + .bio{ margin-top:10px; color:var(--ink-dim);}
+  .about .stats{
+    display:grid; grid-template-columns:repeat(4, 1fr);
+    gap:1px; margin-top:22px;
+    background:var(--line-2);
+    border:1px solid var(--line-2);
+  }
+  .about .stats div{ background:var(--bg); padding:10px 12px;}
+  .about .stats div .n{ font-size:22px; font-family:var(--sans); font-weight:600; color:var(--ink);}
+  .about .stats div .l{ font-size:9.5px; color:var(--ink-mute); letter-spacing:.22em; text-transform:uppercase; margin-top:2px;}
+  .about .close-hint{
+    margin-top:22px; text-align:center;
+    font-size:10px; letter-spacing:.28em; color:var(--ink-mute); text-transform:uppercase;
+  }
+
+  kbd{
+    font-family:var(--mono); font-size:9.5px;
+    border:1px solid var(--line-2); padding:1px 5px;
+    color:var(--ink); background:color-mix(in srgb, var(--ink) 4%, transparent);
+  }
+
+  .dot-portrait{
+    position:absolute;
+    left:50%; top:50%;
+    transform:translate(-50%, -50%);
+    width: var(--dp-size, 420px);
+    height: var(--dp-size, 420px);
+    border-radius:50%;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:3;
+    background: var(--bg);
+    box-shadow:
+      0 0 0 1px var(--line-2),
+      0 0 0 10px var(--bg),
+      0 0 0 11px var(--line-2);
+  }
+  .dot-portrait img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position: 50% 32%;
+    mix-blend-mode: screen;
+    filter: contrast(1.05);
+  }
+  html[data-theme="paper"] .dot-portrait img{
+    mix-blend-mode: multiply;
+    filter: invert(1) contrast(1.05);
+  }
+  html[data-theme="amber"] .dot-portrait img{
+    filter: sepia(1) saturate(3) hue-rotate(-10deg) contrast(1.05);
+  }
+  .dot-portrait::after{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      repeating-linear-gradient(0deg, transparent 0 3px, color-mix(in srgb, var(--bg) 25%, transparent) 3px 4px);
+    mix-blend-mode: overlay;
+    pointer-events:none;
+    opacity:.35;
+  }
+  .dot-portrait .chip{
+    position:absolute; left:8px; bottom:8px;
+    font-family:var(--mono); font-size:8.5px; letter-spacing:.24em;
+    color:var(--ink-dim); text-transform:uppercase;
+    padding:2px 6px;
+    border:1px solid var(--line-2);
+    background:color-mix(in srgb, var(--bg) 80%, transparent);
+  }
+  .dot-portrait .chip b{ color:var(--hot);}
+  .dot-portrait .hit{
+    position:absolute; inset:0;
+    cursor:zoom-in; pointer-events:auto;
+  }
+
+  @keyframes coreBreath{ 0%,100%{ opacity:1;} 50%{ opacity:.55;} }
+  .core-ring{ animation:coreBreath 3s ease-in-out infinite;}
+  .core-dot{ filter:drop-shadow(0 0 6px var(--glow));}
+
+  .link{ stroke:var(--line-2); stroke-width:1; fill:none; stroke-dasharray: 2 4; }
+  .link.live{ stroke:var(--ink-dim); stroke-dasharray: 4 3; animation: dash 18s linear infinite; }
+  @keyframes dash{ to { stroke-dashoffset: -600; } }
+
+  .loading{
+    padding:20px; color:var(--ink-mute); letter-spacing:.22em;
+    font-size:10px; text-transform:uppercase;
+  }
+  .loading::after{ content:"..."; animation:blink 1s infinite; }
+
+  .status-badge{
+    display:inline-block;
+    padding:1px 6px;
+    font-size:9.5px; letter-spacing:.14em; text-transform:uppercase;
+    border:1px solid var(--line-2); color:var(--ink-dim);
+  }
+  .status-badge.building{ color:var(--hot); border-color:var(--hot);}
+  .status-badge.deployed{ color:var(--live); border-color:var(--live);}
+  .status-badge.idea{ color:var(--ink-dim);}
+  .status-badge.paused{ color:var(--ink-mute); border-style:dashed;}
+
+  @media (max-width: 900px){
+    .panel{ width:calc(100% - 40px); }
+    .about h1{ font-size:30px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="chrome">
+  <div class="l">
+    <span class="brand">SRI HARI HARAN <b>/</b> ENGINEER</span>
+    <span class="pill"><span class="dot"></span> online · coding</span>
+  </div>
+  <div class="center">PORTRAIT · GRAPH · v0.5</div>
+  <div class="r">
+    <button id="btn-light" aria-pressed="false">theme</button>
+    <button id="btn-layout" aria-pressed="false">layout</button>
+    <button id="btn-tweaks" aria-pressed="false">tweaks</button>
+  </div>
+</header>
+
+<main class="stage">
+  <div class="frame-corners">
+    <span class="c tl"></span><span class="c tr"></span>
+    <span class="c bl"></span><span class="c br"></span>
+  </div>
+
+  <div class="scene" id="scene">
+    <svg id="graph" viewBox="-550 -380 1100 760" width="100%" height="100%" aria-hidden="true">
+      <defs>
+        <radialGradient id="coreGlow" cx="0" cy="0" r="40" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="var(--glow)" stop-opacity="0.9"/>
+          <stop offset="60%" stop-color="var(--glow)" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="var(--glow)" stop-opacity="0"/>
+        </radialGradient>
+        <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+          <line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1.2" opacity="0.35"/>
+        </pattern>
+      </defs>
+
+      <g id="links"></g>
+
+      <g id="portrait" transform="translate(0, 20)">
+        <circle cx="0" cy="0" r="260" fill="none" stroke="var(--line-2)" stroke-width="1"/>
+        <circle cx="0" cy="0" r="230" fill="none" stroke="var(--line-2)" stroke-dasharray="2 6"/>
+        <circle cx="0" cy="0" r="210" fill="none" stroke="var(--line-2)" stroke-dasharray="1 3" opacity=".7"/>
+        <g stroke="var(--ink-mute)" stroke-width="1" fill="none">
+          <g id="coreSegs"></g>
+        </g>
+      </g>
+
+      <g id="ticks" stroke="var(--ink-mute)" stroke-width="1"></g>
+
+      <g stroke="var(--line-2)" stroke-dasharray="1 5">
+        <line x1="-540" y1="0" x2="540" y2="0"/>
+        <line x1="0" y1="-370" x2="0" y2="370"/>
+      </g>
+
+      <g font-family="var(--mono)" font-size="9" letter-spacing="2" fill="var(--ink-mute)">
+        <text x="-540" y="-358">N-01 / NETWORK</text>
+        <text x="540" y="-358" text-anchor="end">LAT 12.97 · LON 77.59</text>
+        <text x="-540" y="368">SYS · PORTRAIT/GRAPH</text>
+        <text x="540" y="368" text-anchor="end">2026 · ALL RIGHTS BUILT</text>
+      </g>
+    </svg>
+
+    <div class="dot-portrait" id="dotPortrait" style="--dp-size:460px;">
+      <img id="dotImg" src="assets/portrait-dots-med.png" alt="Sri Hari Haran — dot portrait"/>
+      <div class="chip">DOT · MATRIX <b>●</b> LIVE</div>
+      <div class="hit" id="face-hit"></div>
+    </div>
+
+    <div class="nodes-overlay" id="overlay"></div>
+
+    <div class="hint" id="hint">
+      ◦ click face → about · click a reactor node → content · <kbd>ESC</kbd> resets
+    </div>
+  </div>
+
+  <div class="about" id="about">
+    <div class="card">
+      <div class="tag-row">
+        <span>FILE · ABOUT.md</span>
+        <span>IDENTITY · 01</span>
+      </div>
+      <h1>Sri Hari Haran<br/>— <em>Engineer.</em></h1>
+      <div class="sub">BENGALURU · IST · SHIPPING SINCE 2020</div>
+      <p class="bio">I build software for the web and tinker at the edges — systems, tooling, interfaces. I like things that are quiet, fast, and slightly over-engineered in the right places.</p>
+      <p class="bio">This page is the portrait. Every node is a surface. The core on my chest is the pulse — what's live, what's cooking, what's next.</p>
+      <div class="stats">
+        <div><div class="n" id="stat-projects">—</div><div class="l">ships</div></div>
+        <div><div class="n" id="stat-posts">—</div><div class="l">posts</div></div>
+        <div><div class="n" id="stat-logs">—</div><div class="l">logs</div></div>
+        <div><div class="n">1,342</div><div class="l">commits·90d</div></div>
+      </div>
+      <div class="close-hint">click anywhere · press <kbd>ESC</kbd> to return</div>
+    </div>
+  </div>
+
+  <aside class="panel" id="panel">
+    <div class="ph">
+      <span class="idx" id="panelIdx">N · 00</span>
+      <span class="ttl" id="panelTitle">—</span>
+      <button class="x" id="panelClose" aria-label="close">✕</button>
+    </div>
+    <div class="pb" id="panelBody"></div>
+  </aside>
+
+  <div class="tweaks" id="tweaks">
+    <div class="th"><span>TWEAKS</span><span>0.5</span></div>
+    <div class="tb">
+      <div class="group">
+        <label>layout</label>
+        <div class="opts" data-group="layout">
+          <button data-v="reactor" aria-pressed="true">reactor</button>
+          <button data-v="radial">radial</button>
+          <button data-v="orbit">orbit</button>
+          <button data-v="constellation">constellation</button>
+        </div>
+      </div>
+      <div class="group">
+        <label>theme</label>
+        <div class="opts" data-group="theme">
+          <button data-v="noir" aria-pressed="true">noir</button>
+          <button data-v="paper">paper</button>
+          <button data-v="amber">amber</button>
+        </div>
+      </div>
+      <div class="group">
+        <label>dot portrait</label>
+        <div class="opts" data-group="portrait">
+          <button data-v="fine">fine</button>
+          <button data-v="med" aria-pressed="true">medium</button>
+          <button data-v="bold">bold</button>
+          <button data-v="square">square</button>
+        </div>
+      </div>
+      <div class="group">
+        <label>portrait size</label>
+        <div class="opts" data-group="size">
+          <button data-v="360">s</button>
+          <button data-v="460" aria-pressed="true">m</button>
+          <button data-v="560">l</button>
+          <button data-v="680">xl</button>
+        </div>
+      </div>
+      <div class="group">
+        <label>ticker</label>
+        <div class="opts" data-group="ticker">
+          <button data-v="on" aria-pressed="true">on</button>
+          <button data-v="off">off</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="ticker" id="ticker">
+  <div class="tick-track" id="tickTrack"></div>
+</div>
+
+<script>
+/* ---------- API ---------- */
+const API = '';
+
+async function apiFetch(path) {
+  try {
+    const res = await fetch(API + path);
+    if (!res.ok) throw new Error(res.statusText);
+    return res.json();
+  } catch(e) {
+    console.error('API error:', path, e);
+    return null;
+  }
+}
+
+/* ---------- NODES ---------- */
+const NODES = [
+  { id:'now',      label:'Currently Building', meta:'live',       angle:-90 },
+  { id:'learn',    label:'Now Learning',        meta:'03 tracks',  angle:-54 },
+  { id:'write',    label:'Writing / Blog',      meta:'posts',      angle:-18 },
+  { id:'stack',    label:'Stack / Tools',       meta:'toolkit',    angle: 18 },
+  { id:'github',   label:'GitHub',              meta:'activity',   angle: 54 },
+  { id:'talks',    label:'Talks / Notes',       meta:'12',         angle: 90 },
+  { id:'contact',  label:'Contact',             meta:'3 surfaces', angle:126 },
+  { id:'reading',  label:'Reading List',        meta:'07 queue',   angle:162 },
+  { id:'projects', label:'Projects Archive',    meta:'ships',      angle:198 },
+  { id:'roadmap',  label:'Roadmap / Path',      meta:'skill-tree', angle:234 },
+];
+
+function radiusFor(layout){
+  return { radial:340, orbit:360, constellation:330, reactor:340 }[layout] || 340;
+}
+
+const REACTOR = { x:0, y:175 };
+
+function positionFor(i, n, layout){
+  if(layout === 'reactor'){
+    const a = (-90 + (360/n)*i) * Math.PI/180;
+    const r = radiusFor(layout);
+    return { x: Math.cos(a)*r, y: Math.sin(a)*r };
+  }
+  if(layout === 'radial'){
+    const a = NODES[i].angle * Math.PI/180;
+    const r = radiusFor(layout);
+    return { x: Math.cos(a)*r, y: Math.sin(a)*r };
+  }
+  if(layout === 'orbit'){
+    const a = (-90 + (360/n)*i) * Math.PI/180;
+    const r = radiusFor(layout);
+    return { x: Math.cos(a)*r, y: Math.sin(a)*r*0.78 };
+  }
+  const a = NODES[i].angle * Math.PI/180;
+  const r = radiusFor(layout) + ((i*53)%80) - 30;
+  return { x: Math.cos(a)*r, y: Math.sin(a)*r + ((i*37)%60 - 30) };
+}
+
+/* ---------- BUILD OVERLAYS ---------- */
+const scene = document.getElementById('scene');
+const svg = document.getElementById('graph');
+const linksG = document.getElementById('links');
+const overlay = document.getElementById('overlay');
+const ticksG = document.getElementById('ticks');
+
+for(let d=0; d<360; d+=6){
+  const a = d*Math.PI/180;
+  const r1=262, r2=d%30===0?278:270;
+  const x1=Math.cos(a)*r1, y1=Math.sin(a)*r1;
+  const x2=Math.cos(a)*r2, y2=Math.sin(a)*r2;
+  const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+  ln.setAttribute('x1',x1); ln.setAttribute('y1',y1);
+  ln.setAttribute('x2',x2); ln.setAttribute('y2',y2);
+  ln.setAttribute('opacity', d%30===0?.8:.35);
+  ticksG.appendChild(ln);
+}
+
+const segs = document.getElementById('coreSegs');
+for(let i=0;i<12;i++){
+  const a0=(i*30-15)*Math.PI/180, a1=(i*30+15)*Math.PI/180;
+  const r0=44, r1=56;
+  const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d',`M ${Math.cos(a0)*r0} ${Math.sin(a0)*r0}
+    L ${Math.cos(a0)*r1} ${Math.sin(a0)*r1}
+    A ${r1} ${r1} 0 0 1 ${Math.cos(a1)*r1} ${Math.sin(a1)*r1}
+    L ${Math.cos(a1)*r0} ${Math.sin(a1)*r0}
+    A ${r0} ${r0} 0 0 0 ${Math.cos(a0)*r0} ${Math.sin(a0)*r0} Z`);
+  p.setAttribute('fill','none');
+  p.setAttribute('stroke','var(--glow)');
+  p.setAttribute('stroke-width','1');
+  p.setAttribute('opacity',(i%3===0)?.95:.45);
+  segs.appendChild(p);
+}
+
+function layoutNodes(layoutName){
+  linksG.innerHTML = '';
+  overlay.innerHTML = '';
+
+  NODES.forEach((n,i)=>{
+    const {x,y} = positionFor(i, NODES.length, layoutName);
+    const isReactor = layoutName === 'reactor';
+
+    const line = document.createElementNS('http://www.w3.org/2000/svg','path');
+    const startX=0, startY=isReactor?REACTOR.y:20;
+    const cx1=startX+(x-startX)*.4, cy1=startY+(y-startY)*.2;
+    const cx2=startX+(x-startX)*.9, cy2=startY+(y-startY)*.9;
+    line.setAttribute('d',`M ${startX} ${startY} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${x} ${y}`);
+    line.setAttribute('class', n.id==='now'?'link live':'link');
+    linksG.appendChild(line);
+
+    const ring = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    ring.setAttribute('cx',x); ring.setAttribute('cy',y);
+    ring.setAttribute('r',22);
+    ring.setAttribute('fill','none');
+    ring.setAttribute('stroke','var(--line-2)');
+    ring.setAttribute('stroke-dasharray','2 4');
+    linksG.appendChild(ring);
+
+    const el = document.createElement('div');
+    el.className = 'node-label';
+    el.dataset.node = n.id;
+    const left = ((x+550)/1100)*100;
+    const top  = ((y+380)/760)*100;
+    el.style.left = left+'%';
+    el.style.top  = top+'%';
+    if(layoutName === 'reactor'){
+      el.classList.add('reactor-chip');
+      el.innerHTML = `
+        <div class="chip-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="lab">${n.label}</div>
+        <div class="meta">${n.meta}</div>
+      `;
+    } else {
+      el.innerHTML = `
+        <div class="dot"></div>
+        <div class="lab">${String(i+1).padStart(2,'0')} · ${n.label}</div>
+        <div class="meta">${n.meta}</div>
+      `;
+    }
+    el.addEventListener('click', ()=> openNode(n.id));
+    overlay.appendChild(el);
+  });
+}
+
+/* ---------- DYNAMIC PANEL RENDERERS ---------- */
+function statusBadge(s){
+  return `<span class="status-badge ${s}">${s}</span>`;
+}
+
+function fmtDate(d){
+  return new Date(d).toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'2-digit'});
+}
+
+const dynamicNodes = {
+  async now(){
+    const projects = await apiFetch('/projects');
+    if(!projects) return `<section><p style="color:var(--ink-mute)">Could not reach API.</p></section>`;
+    const building = projects.filter(p => p.status === 'building');
+    const others   = projects.filter(p => p.status !== 'building').slice(0, 3);
+    const live = building[0];
+    return `
+      <section>
+        <h4>Now playing · /building</h4>
+        ${live ? `
+        <div class="now">
+          <div class="art"></div>
+          <div class="meta">
+            <div class="lbl">● live · building</div>
+            <div class="t1">${live.title}</div>
+            <div class="t2">started ${fmtDate(live.createdAt)}</div>
+          </div>
+          <div class="bar"><i></i></div>
+        </div>
+        ${building.slice(1).map(p=>`
+          <div class="row" style="margin-top:8px">
+            <span class="t">${p.title}</span>${statusBadge(p.status)}
+          </div>`).join('')}
+        ` : `<p style="color:var(--ink-mute);font-size:12px;">No active builds right now.</p>`}
+      </section>
+      ${others.length ? `
+      <section>
+        <h4>Also shipping</h4>
+        ${others.map(p=>`
+          <div class="row">
+            <span class="t">${p.title}</span>${statusBadge(p.status)}
+          </div>`).join('')}
+      </section>` : ''}
+      <section>
+        <h4>Last commit</h4>
+        <div class="term">
+          <div class="ln"><span class="c">$</span><span class="p">git</span> <b>commit -m</b> <span>"portrait: ship node graph w/ api wiring"</span></div>
+          <div class="ln"><span class="c">#</span><span>myrac · main</span></div>
+          <div class="ln cursor"><span class="c">$</span><span class="p">bun</span> <b>run start:dev</b></div>
+        </div>
+      </section>
+    `;
+  },
+
+  async write(){
+    const posts = await apiFetch('/posts');
+    if(!posts) return `<section><p style="color:var(--ink-mute)">Could not reach API.</p></section>`;
+    const recent = posts.slice(0, 5);
+    const total  = posts.length;
+    return `
+      <section>
+        <h4>Latest · /posts</h4>
+        ${recent.length ? recent.map(p=>`
+          <div class="row">
+            <span class="t">${p.title}</span>
+            <span class="s">${fmtDate(p.createdAt)}</span>
+          </div>`).join('') : `<p style="color:var(--ink-mute);font-size:12px;">No posts yet.</p>`}
+      </section>
+      ${total > 5 ? `<section><p style="color:var(--ink-mute);font-size:12px;">${total - 5} more in the archive.</p></section>` : ''}
+      <section>
+        <h4>Drafts</h4>
+        <p><span class="tag hot">draft</span>— on being an unfinished developer</p>
+        <p><span class="tag hot">draft</span>— against frameworks, tenderly</p>
+      </section>
+    `;
+  },
+
+  async projects(){
+    const projects = await apiFetch('/projects');
+    if(!projects) return `<section><p style="color:var(--ink-mute)">Could not reach API.</p></section>`;
+    const byStatus = { building:[], deployed:[], idea:[], paused:[] };
+    projects.forEach(p => (byStatus[p.status] || byStatus.idea).push(p));
+    return `
+      ${byStatus.building.length ? `
+      <section>
+        <h4>Currently building</h4>
+        ${byStatus.building.map(p=>`
+          <div class="row"><span class="t">${p.title}</span>${statusBadge('building')}</div>`).join('')}
+      </section>` : ''}
+      ${byStatus.deployed.length ? `
+      <section>
+        <h4>Deployed</h4>
+        ${byStatus.deployed.map(p=>`
+          <div class="row">
+            <span class="t">${p.title}</span>
+            <span class="s">${fmtDate(p.createdAt)}</span>
+          </div>`).join('')}
+      </section>` : ''}
+      ${byStatus.idea.length ? `
+      <section>
+        <h4>Ideas</h4>
+        ${byStatus.idea.map(p=>`
+          <div class="row"><span class="t">${p.title}</span>${statusBadge('idea')}</div>`).join('')}
+      </section>` : ''}
+      ${byStatus.paused.length ? `
+      <section>
+        <h4>Paused</h4>
+        <p>${byStatus.paused.map(p=>`<span class="tag">${p.title}</span>`).join('')}</p>
+      </section>` : ''}
+      ${!projects.length ? `<section><p style="color:var(--ink-mute);font-size:12px;">No projects yet. Add via POST /projects.</p></section>` : ''}
+    `;
+  },
+};
+
+/* ---------- STATIC PANEL CONTENT ---------- */
+const content = {
+  now:      { title:'Currently Building', idx:'N · 01' },
+  learn:    { title:'Now Learning',       idx:'N · 02', html:`
+    <section>
+      <h4>Tracks · in-progress</h4>
+      <div class="row"><span class="t">Rust ownership model</span><span class="s">57%</span></div>
+      <div class="row"><span class="t">Distributed systems (MIT 6.824)</span><span class="s">L04 / L24</span></div>
+      <div class="row"><span class="t">SIMD + WASM bindgen</span><span class="s">start</span></div>
+    </section>
+    <section>
+      <h4>This week's notes</h4>
+      <p><span class="tag">rust</span><span class="tag">lifetimes</span><span class="tag hot">wip</span></p>
+      <p style="color:var(--ink-dim); font-size:12px; margin-top:6px;">
+        "Lifetimes aren't constraints — they're a vocabulary. The borrow checker just insists you use the right word."
+      </p>
+    </section>
+    <section>
+      <h4>Queued</h4>
+      <div class="row"><span class="t">CRDTs &amp; Yjs internals</span><span class="s">queued</span></div>
+      <div class="row"><span class="t">Postgres MVCC deep-dive</span><span class="s">queued</span></div>
+    </section>
+  `},
+  write:    { title:'Writing / Blog',     idx:'N · 03' },
+  stack:    { title:'Stack / Tools',      idx:'N · 04', html:`
+    <section>
+      <h4>Daily drivers</h4>
+      <p>
+        <span class="tag on">TypeScript</span>
+        <span class="tag on">NestJS</span>
+        <span class="tag on">Postgres</span>
+        <span class="tag on">Prisma</span>
+        <span class="tag on">Neovim</span>
+      </p>
+    </section>
+    <section>
+      <h4>Comfort</h4>
+      <p>
+        <span class="tag">React</span>
+        <span class="tag">Go</span>
+        <span class="tag">Redis</span>
+        <span class="tag">Docker</span>
+        <span class="tag">tmux</span>
+      </p>
+    </section>
+    <section>
+      <h4>Learning</h4>
+      <p>
+        <span class="tag hot">Rust</span>
+        <span class="tag hot">WASM</span>
+        <span class="tag hot">DuckDB</span>
+      </p>
+    </section>
+    <section>
+      <h4>Machine</h4>
+      <dl class="kv">
+        <dt>laptop</dt><dd>M-series · 32GB</dd>
+        <dt>editor</dt><dd>nvim + lazy.nvim</dd>
+        <dt>shell</dt><dd>zsh · starship</dd>
+        <dt>runtime</dt><dd>Bun · Node</dd>
+      </dl>
+    </section>
+  `},
+  github:   { title:'GitHub',             idx:'N · 05', html:`
+    <section>
+      <h4>Contribution pulse · 90d</h4>
+      <div style="display:grid; grid-template-columns: repeat(30, 1fr); gap:3px;">
+        ${Array.from({length:90}).map((_,i)=>{
+          const l = Math.random();
+          const v = l>.92?4:l>.7?3:l>.45?2:l>.2?1:0;
+          const bg = ['var(--line)','color-mix(in srgb, var(--ink) 20%, var(--bg))','color-mix(in srgb, var(--ink) 40%, var(--bg))','color-mix(in srgb, var(--ink) 70%, var(--bg))','var(--ink)'][v];
+          return `<div style="aspect-ratio:1; background:${bg}; border:1px solid var(--line-2);"></div>`;
+        }).join('')}
+      </div>
+    </section>
+    <section>
+      <h4>Pinned</h4>
+      <div class="row"><span class="t">⌘ myrac</span><span class="s">ts · live</span></div>
+      <div class="row"><span class="t">⌘ slim-cache</span><span class="s">rust · oss</span></div>
+      <div class="row"><span class="t">⌘ tui-kit</span><span class="s">go · oss</span></div>
+    </section>
+    <section>
+      <h4>Recent commits</h4>
+      <div class="term">
+        <div class="ln"><span class="c">*</span><b>myrac</b> <span>feat: wire api to frontend · now</span></div>
+        <div class="ln"><span class="c">*</span><b>myrac</b> <span>fix: double-register in AppModule · 1h</span></div>
+        <div class="ln"><span class="c">*</span><b>myrac</b> <span>feat: rename Logs→Log · 2h</span></div>
+        <div class="ln cursor"><span class="c">$</span><span class="p">git</span> <b>push</b></div>
+      </div>
+    </section>
+  `},
+  talks:    { title:'Talks / Notes',      idx:'N · 06', html:`
+    <section>
+      <h4>Given</h4>
+      <div class="row"><span class="t">The portrait is the product</span><span class="s">BLR.js · 04.26</span></div>
+      <div class="row"><span class="t">Cheap tricks with SVG</span><span class="s">frontend.fm · 01.26</span></div>
+      <div class="row"><span class="t">Shipping in public</span><span class="s">build.space · 09.25</span></div>
+    </section>
+    <section>
+      <h4>Lecture notes</h4>
+      <div class="row"><span class="t">MIT 6.824 — L04: Primary/Backup</span><span class="s">notes</span></div>
+      <div class="row"><span class="t">CMU 15-445 — Buffer pool</span><span class="s">notes</span></div>
+    </section>
+  `},
+  contact:  { title:'Contact',            idx:'N · 07', html:`
+    <section>
+      <h4>Direct</h4>
+      <dl class="kv">
+        <dt>mail</dt><dd>hi@srihariharan.dev</dd>
+        <dt>calendar</dt><dd>/15min</dd>
+      </dl>
+    </section>
+    <section>
+      <h4>Social</h4>
+      <div class="row"><span class="t">github · @channi23</span><span class="s">↗</span></div>
+      <div class="row"><span class="t">rss · /feed.xml</span><span class="s">↗</span></div>
+    </section>
+    <section>
+      <h4>Open to</h4>
+      <p>
+        <span class="tag on">collabs</span>
+        <span class="tag on">consulting</span>
+        <span class="tag">speaking</span>
+      </p>
+    </section>
+  `},
+  reading:  { title:'Reading List',       idx:'N · 08', html:`
+    <section>
+      <h4>Now reading</h4>
+      <div class="now">
+        <div class="art"></div>
+        <div class="meta">
+          <div class="lbl">● reading · p. 204</div>
+          <div class="t1">Designing Data-Intensive Apps</div>
+          <div class="t2">Kleppmann · 64% · ch. 07</div>
+        </div>
+        <div class="bar"><i style="width:64%; animation:none;"></i></div>
+      </div>
+    </section>
+    <section>
+      <h4>Queue</h4>
+      <div class="row"><span class="t">The Elements of Typographic Style</span><span class="s">Bringhurst</span></div>
+      <div class="row"><span class="t">The Soul of a New Machine</span><span class="s">Kidder</span></div>
+      <div class="row"><span class="t">Working in Public</span><span class="s">Eghbal</span></div>
+      <div class="row"><span class="t">Getting Real</span><span class="s">37signals</span></div>
+    </section>
+    <section>
+      <h4>Finished · 2026</h4>
+      <p><span class="tag">Hackers &amp; Painters</span><span class="tag">Out of the Tar Pit</span></p>
+    </section>
+  `},
+  projects: { title:'Projects Archive',   idx:'N · 09' },
+  roadmap:  { title:'Roadmap / Path',     idx:'N · 10', html:`
+    <section>
+      <h4>Skill tree · engineer track</h4>
+      <div class="tree">
+        <div class="node done"><div class="t">Frontend craft</div><div class="d">react · css · svg · anim</div></div>
+        <div class="tree branch">
+          <div class="node done"><div class="t">Design systems</div><div class="d">tokens · theming · a11y</div></div>
+          <div class="node live"><div class="t">Motion + interaction</div><div class="d">in progress · 70%</div></div>
+        </div>
+        <div class="node done"><div class="t">Backend fundamentals</div><div class="d">nestjs · go · postgres</div></div>
+        <div class="tree branch">
+          <div class="node done"><div class="t">API design</div><div class="d">REST · AJV · openapi</div></div>
+          <div class="node live"><div class="t">Distributed systems</div><div class="d">MIT 6.824 · L04 / L24</div></div>
+          <div class="node next"><div class="t">Consensus &amp; replication</div><div class="d">raft · paxos · crdts</div></div>
+        </div>
+        <div class="node live"><div class="t">Rust &amp; systems</div><div class="d">ownership · wasm · simd</div></div>
+        <div class="tree branch">
+          <div class="node next"><div class="t">Storage engines</div><div class="d">b-tree · lsm · mmap</div></div>
+          <div class="node next"><div class="t">Query planning</div><div class="d">duckdb internals</div></div>
+        </div>
+        <div class="node next"><div class="t">Zig &amp; low-level</div><div class="d">arena · comptime</div></div>
+        <div class="node next"><div class="t">Product &amp; writing</div><div class="d">ship · sell · teach</div></div>
+      </div>
+    </section>
+    <section>
+      <h4>Legend</h4>
+      <div class="row"><span class="t">■ done</span><span class="s">shipped / absorbed</span></div>
+      <div class="row"><span class="t">● live</span><span class="s">currently in</span></div>
+      <div class="row"><span class="t">◌ next</span><span class="s">queued · not started</span></div>
+    </section>
+  `},
+};
+
+/* ---------- PANEL ---------- */
+const panel      = document.getElementById('panel');
+const panelIdx   = document.getElementById('panelIdx');
+const panelTitle = document.getElementById('panelTitle');
+const panelBody  = document.getElementById('panelBody');
+const panelClose = document.getElementById('panelClose');
+
+async function openNode(id){
+  closeAbout();
+  const c = content[id];
+  if(!c) return;
+  panelIdx.textContent   = c.idx;
+  panelTitle.textContent = c.title;
+  panel.classList.add('open');
+  document.querySelectorAll('.node-label').forEach(el=>{
+    el.classList.toggle('active', el.dataset.node===id);
+  });
+  scene.style.transition = 'transform .6s cubic-bezier(.2,.8,.2,1)';
+  scene.style.transform  = currentLayout==='reactor'
+    ? 'translate(-14%, -14%) scale(1.15)'
+    : 'translateX(-12%) scale(.94)';
+
+  if(dynamicNodes[id]){
+    panelBody.innerHTML = '<div class="loading">fetching</div>';
+    panelBody.innerHTML = await dynamicNodes[id]();
+  } else {
+    panelBody.innerHTML = c.html || '';
+  }
+}
+
+function closePanel(){
+  panel.classList.remove('open');
+  scene.style.transform = '';
+  document.querySelectorAll('.node-label').forEach(el=> el.classList.remove('active'));
+}
+panelClose.addEventListener('click', closePanel);
+
+/* ---------- ABOUT ---------- */
+const about = document.getElementById('about');
+const hint  = document.getElementById('hint');
+let zoomed  = false;
+
+function zoomIntoFace(){
+  if(zoomed) return;
+  zoomed = true;
+  closePanel();
+  svg.style.transition = 'transform .8s cubic-bezier(.2,.8,.2,1), opacity .4s';
+  svg.style.transform  = 'scale(2.1) translateY(12%)';
+  overlay.style.transition = 'opacity .4s'; overlay.style.opacity = '0';
+  linksG.style.transition  = 'opacity .4s'; linksG.style.opacity  = '.1';
+  setTimeout(()=> about.classList.add('on'), 260);
+  hint.style.opacity = '0';
+}
+function closeAbout(){
+  if(!zoomed) return;
+  zoomed = false;
+  about.classList.remove('on');
+  svg.style.transform  = '';
+  overlay.style.opacity = '';
+  linksG.style.opacity  = '';
+  hint.style.opacity    = '';
+}
+document.getElementById('face-hit').addEventListener('click', zoomIntoFace);
+about.addEventListener('click', e=>{
+  if(e.target===about || e.target.classList.contains('close-hint')) closeAbout();
+});
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape'){ closePanel(); closeAbout(); }
+});
+
+/* load live stats into about card */
+async function loadAboutStats(){
+  const [projects, posts, logs] = await Promise.all([
+    apiFetch('/projects'),
+    apiFetch('/posts'),
+    apiFetch('/logs'),
+  ]);
+  if(projects) document.getElementById('stat-projects').textContent = projects.length;
+  if(posts)    document.getElementById('stat-posts').textContent    = posts.length;
+  if(logs)     document.getElementById('stat-logs').textContent     = logs.length;
+}
+loadAboutStats();
+
+/* ---------- LAYOUT / THEME / TWEAKS ---------- */
+let currentLayout = 'radial';
+let tickerOn = true;
+
+function setLayout(v){
+  currentLayout = v;
+  layoutNodes(v);
+  setPressed('layout', v);
+}
+function setTheme(v){
+  if(v==='noir') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', v);
+  setPressed('theme', v);
+}
+function setPortrait(v){
+  const map = {
+    fine:'assets/portrait-dots-fine.png',
+    med:'assets/portrait-dots-med.png',
+    bold:'assets/portrait-dots-bold.png',
+    square:'assets/portrait-square-med.png',
+  };
+  const img = document.getElementById('dotImg');
+  if(map[v]) img.src = map[v];
+  setPressed('portrait', v);
+}
+function setPortraitSize(v){
+  document.getElementById('dotPortrait').style.setProperty('--dp-size', v+'px');
+  setPressed('size', v);
+}
+function setTicker(v){
+  tickerOn = v==='on';
+  document.getElementById('ticker').style.display = tickerOn?'':'none';
+  setPressed('ticker', v);
+}
+function setPressed(group, v){
+  document.querySelectorAll(`[data-group="${group}"] button`).forEach(b=>{
+    b.setAttribute('aria-pressed', b.dataset.v===v?'true':'false');
+  });
+  persist();
+}
+
+document.querySelectorAll('.tweaks .opts').forEach(opts=>{
+  opts.addEventListener('click', e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    const g=opts.dataset.group, v=b.dataset.v;
+    if(g==='layout')  setLayout(v);
+    if(g==='theme')   setTheme(v);
+    if(g==='portrait') setPortrait(v);
+    if(g==='size')    setPortraitSize(v);
+    if(g==='ticker')  setTicker(v);
+  });
+});
+
+document.getElementById('btn-light').addEventListener('click', ()=>{
+  const cur = document.documentElement.getAttribute('data-theme')||'noir';
+  const next = cur==='noir'?'paper':cur==='paper'?'amber':'noir';
+  setTheme(next);
+});
+document.getElementById('btn-layout').addEventListener('click', ()=>{
+  const order=['reactor','radial','orbit','constellation'];
+  setLayout(order[(order.indexOf(currentLayout)+1)%order.length]);
+});
+document.getElementById('btn-tweaks').addEventListener('click', e=>{
+  const t=document.getElementById('tweaks');
+  const on=!t.classList.contains('on');
+  t.classList.toggle('on', on);
+  e.currentTarget.setAttribute('aria-pressed', on?'true':'false');
+});
+
+/* ---------- TICKER ---------- */
+const tickerItems = [
+  { t:'● LIVE · BUILDING', v:'myrac portrait/graph', hot:true },
+  { t:'NOW READING',        v:'DDIA · p.204' },
+  { t:'LEARNING',           v:'Rust lifetimes · 57%' },
+  { t:'LOCATION',           v:'Bengaluru · IST' },
+  { t:'STACK',              v:'NestJS · Prisma · AJV · Bun' },
+  { t:'API',                v:'localhost:3000/docs' },
+  { t:'COMMITS · 90D',      v:'1,342' },
+];
+function buildTicker(){
+  const row = tickerItems.map(i=>`<span><b class="${i.hot?'hot':''}">${i.t}</b> ${i.v}</span>`).join('');
+  document.getElementById('tickTrack').innerHTML = row + row;
+}
+buildTicker();
+
+/* ---------- PERSIST ---------- */
+function persist(){
+  const state = {
+    layout: currentLayout,
+    theme: document.documentElement.getAttribute('data-theme')||'noir',
+    ticker: tickerOn?'on':'off',
+    portrait: document.querySelector('[data-group="portrait"] [aria-pressed="true"]')?.dataset.v||'med',
+    size: document.querySelector('[data-group="size"] [aria-pressed="true"]')?.dataset.v||'460',
+  };
+  localStorage.setItem('myrac.ui', JSON.stringify(state));
+}
+function restore(){
+  try{
+    const s = JSON.parse(localStorage.getItem('myrac.ui')||'{}');
+    if(s.layout) setLayout(s.layout); else setLayout('reactor');
+    if(s.theme && s.theme!=='noir') setTheme(s.theme);
+    if(s.ticker) setTicker(s.ticker);
+    if(s.portrait) setPortrait(s.portrait);
+    if(s.size) setPortraitSize(s.size);
+  } catch(e){ setLayout('reactor'); }
+}
+restore();
+
+window.addEventListener('resize', ()=> layoutNodes(currentLayout));
+</script>
+</body>
+</html>

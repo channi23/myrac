@@ -13,9 +13,7 @@ export class PostsService {
 
     findAll() {
         return this.prisma.post.findMany({
-            orderBy: {
-                createdAt: 'desc',
-            },
+            orderBy: { createdAt: 'desc' },
         });
     }
 
@@ -23,32 +21,24 @@ export class PostsService {
         const post = await this.prisma.post.findUnique({
             where: { id },
         });
-
         if (!post) {
             throw new NotFoundException(`Post with id "${id}" not found`);
         }
-
         return post;
     }
 
     async update(id: string, data: { title?: string; content?: string }) {
-        try {
-            return await this.prisma.post.update({
-                where: { id },
-                data,
-            });
-        } catch (error) {
-            throw new NotFoundException(`Post with id "${id}" not found`);
-        }
+        await this.findOne(id);
+        return this.prisma.post.update({
+            where: { id },
+            data,
+        });
     }
 
     async remove(id: string) {
-        try {
-            return await this.prisma.post.delete({
-                where: { id },
-            });
-        } catch (error) {
-            throw new NotFoundException(`Post with id "${id}" not found`);
-        }
+        await this.findOne(id);
+        return this.prisma.post.delete({
+            where: { id },
+        });
     }
 }

@@ -10,7 +10,7 @@ export class LogsController {
     constructor(private readonly logsService: LogsService) {}
 
     @ApiOperation({ summary: 'Create a log' })
-    @ApiBody({ schema: createLogSchema as any })
+    @ApiBody({ schema: createLogSchema })
     @ApiCreatedResponse({ description: 'Log created successfully' })
     @ApiBadRequestResponse({ description: 'Invalid log request body' })
     @Post()
@@ -42,7 +42,7 @@ export class LogsController {
 
     @ApiOperation({ summary: 'Update a log' })
     @ApiParam({ name: 'id', type: String })
-    @ApiBody({ schema: updateLogSchema as any })
+    @ApiBody({ schema: updateLogSchema })
     @ApiOkResponse({ description: 'Log updated successfully' })
     @ApiBadRequestResponse({ description: 'Invalid log update body' })
     @Patch(':id')

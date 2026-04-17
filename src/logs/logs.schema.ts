@@ -10,7 +10,7 @@ export const createLogSchema = {
         },
     },
     additionalProperties:false,
-} as const;
+};
 
 export const updateLogSchema = {
     $id : 'UpdateLog',
@@ -23,4 +23,4 @@ export const updateLogSchema = {
     },
     additionalProperties:false,
     minProperties:1,
-} as const;
+};
